@@ -14,15 +14,21 @@ options=(zipman)
 depends=('libx11' 'libxinerama')
 install=dwm.install
 source=(http://dl.suckless.org/dwm/dwm-$pkgver.tar.gz
-	config.h
-	dwm.desktop)
-md5sums=('8bb00d4142259beb11e13473b81c0857'
-         '2453e037f46449774ec8afab49b4f1a2'
-         '939f403a71b6e85261d09fc3412269ee')
+        dwm.desktop
+        config.h)
+_patches=(01-statuscolours.diff)
+source=(${source[@]} ${_patches[@]})
 
 build() {
   cd $srcdir/$pkgname-$pkgver
+
+  for p in "${_patches[@]}"; do
+      echo "=> $p"
+      patch < ../$p || return 1
+  done
+
   cp $srcdir/config.h config.h
+
   sed -i 's/CPPFLAGS =/CPPFLAGS +=/g' config.mk
   sed -i 's/^CFLAGS = -g/#CFLAGS += -g/g' config.mk
   sed -i 's/^#CFLAGS = -std/CFLAGS += -std/g' config.mk
@@ -39,11 +45,6 @@ package() {
   install -m644 -D $srcdir/dwm.desktop $pkgdir/usr/share/xsessions/dwm.desktop
 }
 md5sums=('8bb00d4142259beb11e13473b81c0857'
-         '52c59db001609b35c90910018eb7efcc'
-         '939f403a71b6e85261d09fc3412269ee')
-md5sums=('8bb00d4142259beb11e13473b81c0857'
-         '93c8d3034e5c107742f90a2d77f0bf8c'
-         '939f403a71b6e85261d09fc3412269ee')
-md5sums=('8bb00d4142259beb11e13473b81c0857'
-         '1778b5760cc1624135019397283bc395'
-         '939f403a71b6e85261d09fc3412269ee')
+         '939f403a71b6e85261d09fc3412269ee'
+         '48658452c252157ea2806b6c16337784'
+         'e099a478adaa334d49695f8adcf8171a')

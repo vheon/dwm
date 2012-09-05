@@ -2,12 +2,19 @@
 
 /* appearance */
 static const char font[]            = "-*-terminus-medium-r-*-*-16-*-*-*-*-*-*-*";
-static const char normbordercolor[] = "#073642";
-static const char normbgcolor[]     = "#002b36";
-static const char normfgcolor[]     = "#bbbbbb";
-static const char selbordercolor[]  = "#b58900";
-static const char selbgcolor[]      = "#586e75";
-static const char selfgcolor[]      = "#eeeeee";
+#define NUMCOLORS 9 
+static const char colors[NUMCOLORS][ColLast][9] = {
+  // border foreground background
+  { "#073642", "#657b83", "#002b36" }, // 0 = normal (grey on black)
+  { "#b58900", "#fdf6e3", "#002b36" }, // 1 = selected (white on black)
+  { "#dc322f", "#002b36", "#b58900" }, // 2 = urgent (black on yellow)
+  { "#073642", "#dc322f", "#002b36" }, // 3 = red
+  { "#073642", "#859900", "#002b36" }, // 4 = green
+  { "#073642", "#b58900", "#002b36" }, // 5 = yellow 
+  { "#073642", "#268bd2", "#002b36" }, // 6 = blue
+  { "#073642", "#d33682", "#002b36" }, // 7 = magenta
+  { "#073642", "#2aa198", "#002b36" }, // 8 = cyan
+};
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const Bool showbar           = True;     /* False means no bar */
@@ -19,7 +26,6 @@ static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            True,        -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       False,       -1 },
 };
 
 /* layout(s) */
@@ -46,7 +52,7 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", "#002b36", "-nf", "#839496", "-sb", "#b58900", "-sf", "#eee8d5", NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-fn", font, "-nb", colors[0][ColBG], "-nf", colors[0][ColFG], "-sb", colors[1][ColBG], "-sf", colors[1][ColFG], NULL };
 static const char *termcmd[]  = { "urxvtc", NULL };
 
 static Key keys[] = {
